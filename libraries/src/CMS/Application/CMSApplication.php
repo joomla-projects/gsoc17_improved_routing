@@ -1084,7 +1084,16 @@ abstract class CMSApplication extends WebApplication implements ContainerAwareIn
 		// Get the full request URI.
 		$uri = clone \JUri::getInstance();
 
+		// Load the router
 		$router = static::getRouter();
+
+		// If the url suffix is disable than 301 redirect
+		if ($router->needRedirect($uri))
+		{
+			$this->redirect($uri->newUrl(), 301);
+		}
+
+		// Parse the url
 		$result = $router->parse($uri, true);
 
 		foreach ($result as $key => $value)

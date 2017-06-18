@@ -299,4 +299,64 @@ class Uri extends \Joomla\Uri\Uri
 	{
 		return parent::parse($uri);
 	}
+
+	/**
+	 * Returns true if the last symbol is slash, false otherwise
+	 *
+	 * @return  boolean
+	 *
+	 * @since   4.0
+	 */
+	public function isLastSymbolSlash()
+	{
+		return substr($this->uri, -1) == '/';
+	}
+
+	/**
+	 * Returns true if there is a double slash in uri, false otherwise
+	 *
+	 * @return  boolean
+	 *
+	 * @since   4.0
+	 */
+	public function hasDoubleSlash()
+	{
+		return strpos($this->uri, "//", 7) != '';
+	}
+
+	/**
+	 * Returns true if there is a capital letter in uri, false otherwise
+	 *
+	 * @return  boolean
+	 *
+	 * @since   4.0
+	 */
+	public function hasCapitalLetter()
+	{
+		return preg_match('/[A-Z]/', $this->uri);
+	}
+
+	/**
+	 * Returns the correct url
+	 *
+	 * @return  string
+	 *
+	 * @since   4.0
+	 */
+	public function newUrl()
+	{
+		$newUrl = $this->uri;
+
+		// Remove double slash
+		$newUrl = str_replace(':/','://', trim(preg_replace('/\/+/', '/', $newUrl), '/'));
+
+		// Replacing all capital letters
+		$newUrl = strtolower($newUrl);
+
+		// Adding the trailing slash
+		if (substr($newUrl, -1) != '/')
+			$newUrl = $newUrl . '/';
+
+		return $newUrl;
+	}
 }
