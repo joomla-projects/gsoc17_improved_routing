@@ -479,6 +479,11 @@ class Router
 		// Consider the case of sef is enable and suffix html if disable
 		if ($sef && !$suffix)
 		{
+			if (!$uri->sefUrl($sef))
+			{
+				return true;
+			}
+
 			// The last symbol must be slash
 			if (!$uri->isLastSymbolSlash())
 			{

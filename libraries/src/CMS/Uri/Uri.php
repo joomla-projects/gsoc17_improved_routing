@@ -337,6 +337,69 @@ class Uri extends \Joomla\Uri\Uri
 	}
 
 	/**
+	 * If the sef is enabled and the url is sef url then true, false otherwise
+	 *
+	 * @return  boolean
+	 *
+	 * @since   4.0
+	 */
+	protected function relativeUrl()
+	{
+		$relativeUrl = $this->uri;
+		$relativeUrl = str_replace($this->scheme . '://', '', $relativeUrl);
+		$relativeUrl = str_replace($this->host . '/', "", $relativeUrl);
+		$relativeUrl = str_replace('itemid', 'Itemid', $relativeUrl);
+		$relativeUrl = substr($relativeUrl, -1) == '/' ? substr($relativeUrl, 0, -1) : $relativeUrl;
+
+		return $relativeUrl;
+	}
+
+	/**
+	 * Make absolute url from relative url
+	 *
+	 * @param   string  $relativeUrl  The Relative URI string
+	 *
+	 * @return  boolean
+	 *
+	 * @since   4.0
+	 */
+	protected function absoluteUrl($relativeUrl)
+	{
+		$absoluteUrl = \JRoute::_($relativeUrl, true, $this->scheme == 'https' ? 1 : 2);
+
+		if ($absoluteUrl == '')
+		{
+			$absoluteUrl = $this->uri;
+		}
+
+		return $absoluteUrl;
+	}
+
+	/**
+	 * If the sef is enabled and the url is sef url then true, false otherwise
+	 *
+	 * @param   array $sef Search Engine Friendly Urls mode
+	 *
+	 * @return  boolean
+	 *
+	 * @since   4.0
+	 */
+	public function sefUrl($sef)
+	{
+		if ($sef)
+		{
+			$sefUrl = $this->absoluteUrl($this->relativeUrl());
+
+			if ($this->uri != $sefUrl)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Returns the correct url
 	 *
 	 * @return  string
@@ -345,17 +408,29 @@ class Uri extends \Joomla\Uri\Uri
 	 */
 	public function newUrl()
 	{
-		$newUrl = $this->uri;
+		$sef = \JFactory::getApplication()->get('sef');
+
+		// If the SEF mode is enabled change the url
+		if ($sef)
+		{
+			$newUrl = $this->absoluteUrl($this->relativeUrl());
+		}
+		else
+		{
+			$newUrl = $this->uri;
+		}
 
 		// Remove double slash
-		$newUrl = str_replace(':/','://', trim(preg_replace('/\/+/', '/', $newUrl), '/'));
+		$newUrl = str_replace(':/', '://', trim(preg_replace('/\/+/', '/', $newUrl), '/'));
 
 		// Replacing all capital letters
 		$newUrl = strtolower($newUrl);
 
 		// Adding the trailing slash
 		if (substr($newUrl, -1) != '/')
-			$newUrl = $newUrl . '/';
+		{
+			$newUrl .= '/';
+		}
 
 		return $newUrl;
 	}

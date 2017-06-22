@@ -1090,7 +1090,7 @@ abstract class CMSApplication extends WebApplication implements ContainerAwareIn
 		// If the url suffix is disable than 301 redirect
 		if ($router->needRedirect($uri))
 		{
-			$this->redirect($uri->newUrl(), 301);
+			$this->redirect($uri->newUrl($this->input->getArray()), 301);
 		}
 
 		// Parse the url
