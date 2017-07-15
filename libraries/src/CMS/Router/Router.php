@@ -461,4 +461,48 @@ class Router
 
 		return $uri;
 	}
+
+	/**
+	 * Checking the route for fulfilled requirement of url
+	 *
+	 * @param   JUri  $uri  The uri.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   4.0
+	 */
+	public function needRedirect($uri)
+	{
+		$sef = \JFactory::getApplication()->get('sef');
+		$suffix = \JFactory::getApplication()->get('sef_suffix');
+
+		// Consider the case of sef is enable and suffix html if disable
+		if ($sef && !$suffix)
+		{
+			if (!$uri->sefUrl($sef))
+			{
+				return true;
+			}
+
+			// The last symbol must be slash
+			if (!$uri->isLastSymbolSlash())
+			{
+				return true;
+			}
+
+			// Must not be double slash
+			if ($uri->hasDoubleSlash())
+			{
+				return true;
+			}
+
+			// Must not be the capital letter
+			if ($uri->hasCapitalLetter())
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 }
