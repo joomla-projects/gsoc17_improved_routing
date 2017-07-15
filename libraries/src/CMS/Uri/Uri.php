@@ -309,7 +309,7 @@ class Uri extends \Joomla\Uri\Uri
 	 */
 	public function isLastSymbolSlash()
 	{
-		return substr($this->uri, -1) == '/';
+		return substr($this->uri, -1) === '/';
 	}
 
 	/**
@@ -321,7 +321,7 @@ class Uri extends \Joomla\Uri\Uri
 	 */
 	public function hasDoubleSlash()
 	{
-		return strpos($this->uri, "//", 7) != '';
+		return strpos($this->uri, "//", 7) !== '';
 	}
 
 	/**
@@ -349,7 +349,7 @@ class Uri extends \Joomla\Uri\Uri
 		$relativeUrl = str_replace($this->scheme . '://', '', $relativeUrl);
 		$relativeUrl = str_replace($this->host . '/', "", $relativeUrl);
 		$relativeUrl = str_replace('itemid', 'Itemid', $relativeUrl);
-		$relativeUrl = substr($relativeUrl, -1) == '/' ? substr($relativeUrl, 0, -1) : $relativeUrl;
+		$relativeUrl = substr($relativeUrl, -1) === '/' ? substr($relativeUrl, 0, -1) : $relativeUrl;
 
 		return $relativeUrl;
 	}
@@ -365,9 +365,9 @@ class Uri extends \Joomla\Uri\Uri
 	 */
 	protected function absoluteUrl($relativeUrl)
 	{
-		$absoluteUrl = \JRoute::_($relativeUrl, true, $this->scheme == 'https' ? 1 : 2);
+		$absoluteUrl = \JRoute::_($relativeUrl, true, $this->scheme === 'https' ? 1 : 2);
 
-		if ($absoluteUrl == '')
+		if ($absoluteUrl === '')
 		{
 			$absoluteUrl = $this->uri;
 		}
@@ -378,7 +378,7 @@ class Uri extends \Joomla\Uri\Uri
 	/**
 	 * If the sef is enabled and the url is sef url then true, false otherwise
 	 *
-	 * @param   array $sef Search Engine Friendly Urls mode
+	 * @param   array  $sef  Search Engine Friendly Urls mode
 	 *
 	 * @return  boolean
 	 *
@@ -390,7 +390,7 @@ class Uri extends \Joomla\Uri\Uri
 		{
 			$sefUrl = $this->absoluteUrl($this->relativeUrl());
 
-			if ($this->uri != $sefUrl)
+			if ($this->uri !== $sefUrl)
 			{
 				return false;
 			}
@@ -427,7 +427,7 @@ class Uri extends \Joomla\Uri\Uri
 		$newUrl = strtolower($newUrl);
 
 		// Adding the trailing slash
-		if (substr($newUrl, -1) != '/')
+		if (substr($newUrl, -1) !== '/')
 		{
 			$newUrl .= '/';
 		}

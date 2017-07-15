@@ -106,7 +106,7 @@ class JRoute
 	/**
 	 * Adding the trailing slash if it is nessecary
 	 *
-	 * @param   string   $url    Absolute or Relative URI to Joomla resource.
+	 * @param   string  $url  Absolute or Relative URI to Joomla resource.
 	 *
 	 * @return string The translated humanly readable URL
 	 *
@@ -116,7 +116,7 @@ class JRoute
 	{
 		$sef = \JFactory::getApplication()->get('sef');
 		$suffix = \JFactory::getApplication()->get('sef_suffix');
-		$lastSlash = substr($url, -1) == '/';
+		$lastSlash = substr($url, -1) === '/';
 
 		if ($sef && !$suffix && !$lastSlash)
 		{

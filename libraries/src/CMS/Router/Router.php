@@ -465,7 +465,7 @@ class Router
 	/**
 	 * Checking the route for fulfilled requirement of url
 	 *
-	 * @param   JUri  $uri     The uri.
+	 * @param   JUri  $uri  The uri.
 	 *
 	 * @return  boolean
 	 *
