@@ -175,6 +175,18 @@ class Pagination
 		{
 			$this->viewall = true;
 		}
+
+		// Adding the link tags in the head of document
+		if ($this->getPagePreviousLink() !== '')
+		{
+			\JFactory::getDocument()->addHeadLink($this->getPagePreviousLink(), 'prev', 'rel');
+		}
+
+		if ($this->getPageNextLink() !== '')
+		{
+			\JFactory::getDocument()->addHeadLink($this->getPageNextLink(), 'next', 'rel');
+		}
+
 	}
 
 	/**
@@ -439,6 +451,44 @@ class Pagination
 		{
 			return '';
 		}
+	}
+
+	/**
+	 * Create and return the previous page link for an article or a category.
+	 *
+	 * @return  string  The link tag of previous page link.
+	 *
+	 * @since   1.5
+	 */
+	public function getPagePreviousLink()
+	{
+		$data = $this->_buildDataObject();
+
+		if ($data->previous->base !== null)
+		{
+			return $data->previous->link;
+		}
+
+		return '';
+	}
+
+	/**
+	 * Create and return the next page link for an article or a category.
+	 *
+	 * @return  string  The link tag of previous page link.
+	 *
+	 * @since   1.5
+	 */
+	public function getPageNextLink()
+	{
+		$data = $this->_buildDataObject();
+
+		if ($data->next->base !== null)
+		{
+			return $data->next->link;
+		}
+
+		return '';
 	}
 
 	/**
