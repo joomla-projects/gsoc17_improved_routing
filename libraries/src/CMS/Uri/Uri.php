@@ -321,7 +321,14 @@ class Uri extends \Joomla\Uri\Uri
 	 */
 	public function hasDoubleSlash()
 	{
-		return strpos($this->uri, "//", 7) !== '';
+		if ($this->path === '/')
+		{
+			return false;
+		}
+		else
+		{
+			return strpos($this->uri, "//", 7);
+		}
 	}
 
 	/**
