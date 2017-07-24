@@ -458,7 +458,7 @@ class Pagination
 	 *
 	 * @return  string  The link tag of previous page link.
 	 *
-	 * @since   1.5
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getPagePreviousLink()
 	{
