@@ -479,6 +479,7 @@ class Router
 		// Consider the case of sef is enable and suffix html if disable
 		if ($sef && !$suffix)
 		{
+			// Checking url for SEF-ability
 			if (!$uri->sefUrl($sef))
 			{
 				return true;
@@ -490,17 +491,36 @@ class Router
 				return true;
 			}
 
-			// Must not be double slash
+			// The url has not to include a double slash
 			if ($uri->hasDoubleSlash())
 			{
 				return true;
 			}
 
-			// Must not be the capital letter
+			// The url has not to include the capital letter
 			if ($uri->hasCapitalLetter())
 			{
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * The 301-redirection is used only for menu items, this function is checking this case
+	 *
+	 * @param   JUri  $uri  The uri.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   4.0
+	 */
+	public function need301Redirect($uri)
+	{
+		if ($uri->containMenuItem())
+		{
+			return true;
 		}
 
 		return false;
