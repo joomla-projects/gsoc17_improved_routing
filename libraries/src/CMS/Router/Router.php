@@ -476,8 +476,8 @@ class Router
 		$sef = \JFactory::getApplication()->get('sef');
 		$suffix = \JFactory::getApplication()->get('sef_suffix');
 
-		// Consider the case of sef is enable and suffix html if disable
-		if ($sef && !$suffix)
+		// Consider the case of sef is enable and the coming link is NON-SEF url
+		if ($sef)
 		{
 			// Checking url for SEF-ability
 			if (!$uri->sefUrl($sef))
@@ -485,10 +485,14 @@ class Router
 				return true;
 			}
 
-			// The last symbol must be slash
-			if (!$uri->isLastSymbolSlash())
+			// Check the last symbol is a slash only if adding .html suffix is disabled
+			if (!$suffix)
 			{
-				return true;
+				// The last symbol must be slash
+				if (!$uri->isLastSymbolSlash())
+				{
+					return true;
+				}
 			}
 
 			// The url has not to include a double slash
