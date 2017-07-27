@@ -476,27 +476,32 @@ class Router
 		$sef = \JFactory::getApplication()->get('sef');
 		$suffix = \JFactory::getApplication()->get('sef_suffix');
 
-		// Consider the case of sef is enable and suffix html if disable
-		if ($sef && !$suffix)
+		// Consider the case of sef is enable and the coming link is NON-SEF url
+		if ($sef)
 		{
+			// Checking url for SEF-ability
 			if (!$uri->sefUrl($sef))
 			{
 				return true;
 			}
 
-			// The last symbol must be slash
-			if (!$uri->isLastSymbolSlash())
+			// Check the last symbol is a slash only if adding .html suffix is disabled
+			if (!$suffix)
 			{
-				return true;
+				// The last symbol must be slash
+				if (!$uri->isLastSymbolSlash())
+				{
+					return true;
+				}
 			}
 
-			// Must not be double slash
+			// The url has not to include a double slash
 			if ($uri->hasDoubleSlash())
 			{
 				return true;
 			}
 
-			// Must not be the capital letter
+			// The url has not to include the capital letter
 			if ($uri->hasCapitalLetter())
 			{
 				return true;
@@ -504,5 +509,58 @@ class Router
 		}
 
 		return false;
+	}
+
+	/**
+	 * The 301-redirection is used only for menu items, this function is checking this case
+	 *
+	 * @param   JUri  $uri  The uri.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   4.0
+	 */
+	public function need301Redirect($uri)
+	{
+		if ($uri->containMenuItem())
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Figure out need 404 redirection
+	 *
+	 * @param   JUri  $uri  The uri.
+	 *
+	 * @return  void
+	 *
+	 * @since   4.0
+	 */
+	public function check404Error($uri)
+	{
+		$result = $this->parse($uri, false);
+
+		if ($result['option'] == 'com_content')
+		{
+			$db = \JFactory::getDbo();
+			$query = $db->getQuery(true);
+
+			$query->select('state')->from('#__content')->where('`id` = ' . $db->quote($result['id']));
+			$db->setQuery($query);
+			$isPublished = $db->loadResult();
+
+			if (!isset($isPublished))
+			{
+				throw new \Exception("HTTP/1.0 404 Not Found", 404);
+			}
+
+			if ($isPublished !== 1)
+			{
+				throw new \Exception("Forbidden. Access to this resource on the server is denied!", 403);
+			}
+		}
 	}
 }
