@@ -529,4 +529,38 @@ class Router
 
 		return false;
 	}
+
+	/**
+	 * Figure out need 404 redirection
+	 *
+	 * @param   JUri  $uri  The uri.
+	 *
+	 * @return  void
+	 *
+	 * @since   4.0
+	 */
+	public function check404Error($uri)
+	{
+		$result = $this->parse($uri, false);
+
+		if ($result['option'] == 'com_content')
+		{
+			$db = \JFactory::getDbo();
+			$query = $db->getQuery(true);
+
+			$query->select('state')->from('#__content')->where('`id` = ' . $db->quote($result['id']));
+			$db->setQuery($query);
+			$isPublished = $db->loadResult();
+
+			if (!isset($isPublished))
+			{
+				throw new \Exception("HTTP/1.0 404 Not Found", 404);
+			}
+
+			if ($isPublished !== 1)
+			{
+				throw new \Exception("Forbidden. Access to this resource on the server is denied!", 403);
+			}
+		}
+	}
 }

@@ -1093,6 +1093,9 @@ abstract class CMSApplication extends WebApplication implements ContainerAwareIn
 		// Load the router
 		$router = static::getRouter();
 
+		// If the url has 404 error generate the exception
+		$router->check404Error($uri);
+
 		// If the url suffix is disabled than a redirection
 		if ($router->needRedirect($uri))
 		{
