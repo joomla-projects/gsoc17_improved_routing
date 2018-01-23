@@ -195,12 +195,6 @@ final class SiteApplication extends CMSApplication
 			$document->setGenerator('Joomla! - Open Source Content Management');
 		}
 
-		// Add noindex and nofollow tags for search
-		if ($component === 'com_search')
-		{
-			$document->setMetaData('robots', 'noindex, follow');
-		}
-
 		$contents = ComponentHelper::renderComponent($component);
 		$document->setBuffer($contents, 'component');
 

@@ -1093,22 +1093,10 @@ abstract class CMSApplication extends WebApplication implements ContainerAwareIn
 		// Load the router
 		$router = static::getRouter();
 
-		// If the url has 404 error generate the exception
-		$router->check404Error($uri);
-
-		// If the url suffix is disabled than a redirection
+		// If the url suffix is disable than 301 redirect
 		if ($router->needRedirect($uri))
 		{
-			// For item menu will be used 301-redirection
-			// Otherwise will be used 303-redirection
-			if ($router->need301Redirect($uri))
-			{
-				$this->redirect($uri->newUrl($this->input->getArray()), 303);
-			}
-			else
-			{
-				$this->redirect($uri->newUrl($this->input->getArray()), 301);
-			}
+			$this->redirect($uri->newUrl($this->input->getArray()), 301);
 		}
 
 		// Parse the url
