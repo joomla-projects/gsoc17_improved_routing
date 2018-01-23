@@ -89,38 +89,12 @@ class JRoute
 
 		$url = $uri->toString($scheme);
 
-		// Add the trailing slash if is nessecary
-		$url = self::urlTrailingSlash($url);
-
 		// Replace spaces.
 		$url = preg_replace('/\s/u', '%20', $url);
 
 		if ($xhtml)
 		{
 			$url = htmlspecialchars($url, ENT_COMPAT, 'UTF-8');
-		}
-
-		return $url;
-	}
-
-	/**
-	 * Adding the trailing slash if it is nessecary
-	 *
-	 * @param   string  $url  Absolute or Relative URI to Joomla resource.
-	 *
-	 * @return string The translated humanly readable URL
-	 *
-	 * @since   11.1
-	 */
-	protected static function urlTrailingSlash($url)
-	{
-		$sef = \JFactory::getApplication()->get('sef');
-		$suffix = \JFactory::getApplication()->get('sef_suffix');
-		$lastSlash = substr($url, -1) === '/';
-
-		if ($sef && !$suffix && !$lastSlash)
-		{
-			return $url . '/';
 		}
 
 		return $url;
