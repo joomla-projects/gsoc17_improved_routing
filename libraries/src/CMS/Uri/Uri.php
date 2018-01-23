@@ -321,14 +321,7 @@ class Uri extends \Joomla\Uri\Uri
 	 */
 	public function hasDoubleSlash()
 	{
-		if ($this->path === '/')
-		{
-			return false;
-		}
-		else
-		{
-			return strpos($this->uri, "//", 7);
-		}
+		return strpos($this->uri, "//", 7) !== '';
 	}
 
 	/**
@@ -440,27 +433,5 @@ class Uri extends \Joomla\Uri\Uri
 		}
 
 		return $newUrl;
-	}
-
-	/**
-	 * Returns if the url contains the itemId
-	 *
-	 * @return  boolean
-	 *
-	 * @since   4.0
-	 */
-	public function containMenuItem()
-	{
-		// In same cases the first letter of ItemId can be the lowercase letter
-		// Therefore it is nessesary to check both cases
-		$case1 = strpos($this->uri, 'itemid');
-		$case2 = strpos($this->uri, 'Itemid');
-
-		if (($case1 !== false) || ($case2 !== false))
-		{
-			return true;
-		}
-
-		return false;
 	}
 }
